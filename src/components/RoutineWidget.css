@@ -1,0 +1,264 @@
+.routine-widget {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.routine-widget h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.routine-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .routine-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.routine-item {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.routine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.routine-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.routine-edit-btn {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.routine-desc {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.routine-tracker {
+  margin-top: auto;
+}
+
+/* 14 Checkboxes (2 rows of 7) */
+.routine-tracker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem 0.2rem;
+  width: 100%;
+}
+
+.routine-day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.routine-square {
+  width: 100%;
+  aspect-ratio: 1/1;
+  max-width: 24px;
+  border-radius: 4px;
+  border: 1.5px solid var(--text-secondary);
+  background-color: var(--bg-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.routine-square:hover { border-color: var(--accent); }
+.routine-square.done { background-color: var(--accent); border-color: var(--accent); }
+
+.routine-date {
+  font-size: 0.55rem;
+  color: var(--text-secondary);
+  text-align: center;
+  opacity: 0.7;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+
+/* Weekly / Biweekly Badge */
+.routine-freq-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Add Button */
+.routine-add-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.routine-add-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* Modal */
+.rw-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayIn 0.18s ease;
+}
+
+.rw-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 440px;
+  width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn 0.22s ease;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.32);
+}
+
+.rw-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.rw-modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.rw-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-group input, .form-group textarea, .rw-select {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input:focus, .form-group textarea:focus, .rw-select:focus {
+  border-color: var(--accent);
+}
+
+.rw-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+  padding-right: 2rem;
+}
+
+.rw-modal-footer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.rw-btn-save {
+  padding: 0.6rem 1.2rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.rw-btn-save:hover { opacity: 0.85; }
+
+.rw-btn-delete {
+  padding: 0.6rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rw-btn-delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+}

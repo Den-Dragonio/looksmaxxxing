@@ -1,0 +1,47 @@
+.settings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-info h3 {
+  font-size: 1.125rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.settings-info p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.settings-select {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.settings-select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

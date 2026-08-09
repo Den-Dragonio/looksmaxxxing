@@ -1,0 +1,43 @@
+.info-widget {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-display {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.date-display {
+  font-size: 1rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.rates-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rate-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  background-color: var(--bg-primary);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.rate-currency {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.rate-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}

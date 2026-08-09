@@ -1,0 +1,236 @@
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.notes-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.notes-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 0.75rem;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  overflow: hidden; /* clips slide animation */
+}
+
+.notes-content {
+  text-align: center;
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── Directional slide animations ── */
+@keyframes slideFromRight {
+  from { transform: translateX(42px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideFromLeft {
+  from { transform: translateX(-42px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+.notes-text {
+  font-size: 0.875rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* 'right' = navigating to next → new note slides in from right */
+.notes-text.slide-right {
+  animation: slideFromRight 0.32s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+
+/* 'left' = navigating to prev → new note slides in from left */
+.notes-text.slide-left {
+  animation: slideFromLeft 0.32s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+
+.notes-empty {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+.nav-arrow {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  transition: color 0.18s, background 0.18s;
+  flex-shrink: 0;
+}
+.nav-arrow:hover {
+  color: var(--accent);
+  background: rgba(139,92,246,0.08);
+}
+
+.notes-edit-btn {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ──────────────────────────────────────────
+   Notes Edit Modal
+────────────────────────────────────────── */
+.notes-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayIn 0.18s ease;
+}
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.notes-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 440px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalIn 0.22s ease;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.32);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.notes-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+.notes-modal-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
+
+/* Shared X close button (also defined in HabitTracker.css) */
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  transition: color 0.18s, background 0.18s;
+}
+.modal-close-btn:hover { color: var(--text-primary); background: var(--border); }
+
+.notes-modal-sub {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.1rem;
+}
+
+.notes-modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.notes-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.notes-modal-bullet {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.notes-modal-input {
+  flex: 1;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.notes-modal-input:focus { border-color: var(--accent); }
+
+.notes-modal-delete {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: color 0.18s, background 0.18s;
+  flex-shrink: 0;
+}
+.notes-modal-delete:hover { color: #ef4444; background: rgba(239,68,68,0.1); }
+
+.notes-modal-add {
+  width: 100%;
+  padding: 0.52rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+  margin-bottom: 0.7rem;
+}
+.notes-modal-add:hover { border-color: var(--accent); color: var(--accent); }
+
+.notes-modal-done {
+  width: 100%;
+  padding: 0.58rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.18s;
+}
+.notes-modal-done:hover { opacity: 0.85; }

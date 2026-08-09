@@ -1,0 +1,77 @@
+.purchases-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.purchases-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.purchases-table th, 
+.purchases-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.purchases-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ef4444; /* red */
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.add-purchase-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.add-purchase-form input {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.price-input-wrapper input {
+  width: 100%;
+  padding-right: 2rem;
+}
+
+.currency-symbol {
+  position: absolute;
+  right: 10px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .add-purchase-form {
+    grid-template-columns: 1fr;
+  }
+}

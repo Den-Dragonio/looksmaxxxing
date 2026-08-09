@@ -1,0 +1,70 @@
+.mini-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.streak-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--success-light);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: var(--success-dark);
+  font-weight: 600;
+}
+
+.streak-count {
+  font-size: 1.25rem;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.calendar-row {
+  display: flex;
+  align-items: center;
+}
+
+.header-row {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.habit-label {
+  flex: 0 0 100px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.day-header, .checkbox-cell, .intensity-cell {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.habit-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.intensity-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border);
+}
+
+.intensity-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}

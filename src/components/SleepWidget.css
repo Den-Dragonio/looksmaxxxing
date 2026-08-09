@@ -1,0 +1,293 @@
+.sleep-dashboard {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sleep-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sleep-section h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.sleep-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* 1. CHART */
+.sleep-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sleep-tabs {
+  display: flex;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sleep-tabs button {
+  background: none;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sleep-tabs button.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+.sleep-chart-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+  height: 120px;
+  padding-top: 1rem;
+  overflow-x: auto; /* for 30 days */
+}
+
+.sleep-chart-container::-webkit-scrollbar {
+  height: 4px;
+}
+.sleep-chart-container::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.chart-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 14px;
+}
+
+.chart-bar {
+  width: 100%;
+  height: 100px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart-bar-fill {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.chart-bar-label {
+  font-size: 0.5rem;
+  color: var(--text-secondary);
+  transform: rotate(-45deg);
+  transform-origin: top left;
+  margin-top: 0.2rem;
+  width: 10px;
+}
+
+.sleep-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.stat-val {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+
+.sleep-no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.sleep-no-data p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sleep-no-data span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* 2. TODAY'S INPUT */
+.sleep-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sleep-duration {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.sleep-duration strong {
+  color: var(--accent);
+  margin-left: 0.3rem;
+}
+
+.sleep-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sleep-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.sleep-card-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--bg-secondary);
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.sleep-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sleep-card-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.sleep-time-input {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+  cursor: pointer;
+}
+
+.sleep-time-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.5);
+}
+
+
+/* 3. GITHUB GRAPH */
+.github-grid-scroll {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  position: relative;
+}
+
+.github-months-row {
+  position: relative;
+  height: 18px;
+  margin-bottom: 4px;
+}
+
+.github-month-label {
+  position: absolute;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.github-grid {
+  display: flex;
+  gap: 3px;
+  width: max-content;
+}
+
+.github-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.github-square {
+  width: 12px;
+  height: 12px;
+  background: rgba(139, 92, 246, 0.08); /* Empty state */
+  border-radius: 2px;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.github-square:hover {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.github-grid-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.github-grid-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}

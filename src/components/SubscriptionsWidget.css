@@ -1,0 +1,201 @@
+.subs-widget {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.subs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subs-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.subs-total {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(139, 92, 246, 0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+}
+
+.subs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.subs-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: opacity 0.2s;
+}
+
+.subs-item.inactive {
+  opacity: 0.6;
+}
+
+.subs-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+}
+
+.subs-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.subs-price {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.subs-inline-edit {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Custom Toggle */
+.subs-toggle {
+  width: 32px;
+  height: 18px;
+  background: var(--border);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.subs-toggle.on {
+  background: var(--accent);
+}
+
+.subs-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s;
+}
+
+.subs-toggle.on .subs-toggle-thumb {
+  transform: translateX(14px);
+}
+
+.subs-add-btn {
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.subs-add-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Modal */
+.subs-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayIn 0.18s ease;
+}
+
+.subs-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90vw;
+  max-width: 340px;
+  animation: modalIn 0.22s ease;
+}
+
+.subs-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.subs-modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.subs-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.subs-input {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+}
+.subs-input:focus { border-color: var(--accent); }
+
+.subs-modal-footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.subs-btn-save {
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.subs-btn-delete {
+  padding: 0.5rem 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
