@@ -262,3 +262,61 @@
 .rw-btn-delete:hover {
   background: rgba(239, 68, 68, 0.2);
 }
+
+.routine-today-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.routine-today-btn:hover {
+  background: var(--border);
+}
+
+.routine-today-btn.done {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.routine-today-btn.done:hover {
+  opacity: 0.9;
+}
+
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .routine-widget {
+    padding: 1rem;
+  }
+
+  .routine-item {
+    padding: 0.875rem;
+  }
+
+  .routine-header {
+    gap: 0.5rem;
+  }
+
+  .routine-tracker-grid {
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .routine-today-btn {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .rw-modal {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}

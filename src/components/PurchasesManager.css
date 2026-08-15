@@ -204,3 +204,11 @@ body.dark-theme .clickable-row:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .pm-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}

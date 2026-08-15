@@ -206,3 +206,20 @@
   transition: opacity 0.2s;
 }
 .ht-modal-done:hover { opacity: 0.85; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .habit-tracker {
+    overflow-x: auto;
+  }
+
+  .habit-list {
+    min-width: max-content;
+  }
+
+  .ht-modal {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}

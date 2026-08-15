@@ -142,3 +142,124 @@ body.dark-theme .silhouette-svg path,
 body.dark-theme .silhouette-svg ellipse {
   fill: #e0e0e0;
 }
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE — base breakpoints
+   ══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Layout shell */
+  .app-container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 1rem 1rem 80px; /* bottom space for fixed nav */
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+  }
+
+  /* Page header shrink */
+  .page-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .page-container {
+    height: auto;
+    min-height: 0;
+  }
+
+  /* Remove fixed height constraints on mobile */
+  .home-page {
+    height: auto;
+  }
+
+  /* Disable overflow:hidden on home dashboard on mobile */
+  .dashboard-content {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    overflow: visible !important;
+    gap: 1.2rem;
+  }
+
+  /* Silhouette takes full width but limited height */
+  .silhouette-container {
+    min-height: 300px;
+    padding: 1rem;
+  }
+
+  /* Widgets stack full width and auto height */
+  .widgets-container {
+    height: auto;
+    overflow-y: visible;
+    overflow-x: hidden;
+    padding-right: 0;
+    gap: 1.2rem;
+  }
+
+  /* Glass panels full width */
+  .glass-panel {
+    border-radius: 12px;
+  }
+
+  /* Content grid (Analytics page) */
+  .content-grid {
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+
+  /* Settings page */
+  .settings-content {
+    max-width: 100%;
+  }
+
+  .settings-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .settings-select {
+    width: 100%;
+  }
+
+  /* Touch targets */
+  .action-button {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* HabitTracker: keep squares but allow overflow scroll */
+  .habit-tracker {
+    overflow-x: auto;
+  }
+
+  /* TickerTape — smaller font */
+  .ticker-content {
+    font-size: 0.75rem !important;
+  }
+
+  /* Purchases / Другое page */
+  .purchases-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Extra small screens ── */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0.75rem 0.75rem 80px;
+  }
+
+  .page-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .glass-panel {
+    border-radius: 10px;
+  }
+}
+

@@ -26,11 +26,11 @@ const FREQ_LABELS = {
   custom: 'Кастом'
 };
 
-const generateNext14Days = () => {
+const generatePast14Days = () => {
   const dates = [];
-  for (let i = 0; i < 14; i++) {
+  for (let i = 13; i >= 0; i--) {
     const d = new Date();
-    d.setDate(d.getDate() + i);
+    d.setDate(d.getDate() - i);
     
     // Format YYYY-MM-DD for storage key
     const yyyy = d.getFullYear();
@@ -46,7 +46,8 @@ const generateNext14Days = () => {
   return dates;
 };
 
-const DATES = generateNext14Days();
+const DATES = generatePast14Days();
+const TODAY_KEY = DATES[DATES.length - 1].key;
 
 const RoutineWidget = ({ category }) => {
   const { showToast } = useAppContext();
@@ -148,7 +149,19 @@ const RoutineWidget = ({ category }) => {
             <p className="routine-desc">{routine.description}</p>
             
             <div className="routine-tracker">
-              {routine.freq === 'custom' ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <span className="routine-freq-badge" style={{ marginBottom: 0 }}>
+                  {FREQ_LABELS[routine.freq]}
+                </span>
+                <button 
+                  className={`routine-today-btn ${routine.history[TODAY_KEY] ? 'done' : ''}`}
+                  onClick={() => toggleDay(routine.id, TODAY_KEY)}
+                >
+                  {routine.history[TODAY_KEY] ? '✓ Выполнено сегодня' : 'Выполнить сегодня'}
+                </button>
+              </div>
+
+              {routine.freq === 'custom' && (
                 <div className="routine-tracker-grid">
                   {DATES.map((d, i) => {
                     const isDone = routine.history[d.key];
@@ -164,10 +177,6 @@ const RoutineWidget = ({ category }) => {
                       </div>
                     );
                   })}
-                </div>
-              ) : (
-                <div className="routine-freq-badge">
-                  {FREQ_LABELS[routine.freq]}
                 </div>
               )}
             </div>

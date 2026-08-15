@@ -263,3 +263,23 @@ body.dark-theme .add-todo-btn:hover {
 .todo-btn-save:hover {
   background: var(--accent-hover);
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .todo-widget {
+    padding: 1rem;
+  }
+
+  .todo-body {
+    max-height: 300px;
+  }
+
+  .todo-lists {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .todo-column {
+    min-height: 120px;
+  }
+}

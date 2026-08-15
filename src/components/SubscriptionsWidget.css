@@ -199,3 +199,11 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .sub-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}

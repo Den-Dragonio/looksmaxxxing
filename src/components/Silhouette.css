@@ -74,3 +74,30 @@
 .animated-subtext.active {
   opacity: 1;
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .silhouette-figure {
+    min-height: 320px;
+    max-width: 100%;
+  }
+
+  /* Smaller text labels on mobile */
+  .animated-title {
+    font-size: 1.1rem;
+  }
+
+  .animated-subtext {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .silhouette-figure {
+    min-height: 260px;
+  }
+
+  .animated-title {
+    font-size: 0.9rem;
+  }
+}

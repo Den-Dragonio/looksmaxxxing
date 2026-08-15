@@ -234,3 +234,10 @@
   transition: opacity 0.18s;
 }
 .notes-modal-done:hover { opacity: 0.85; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .notes-widget {
+    padding: 1rem;
+  }
+}

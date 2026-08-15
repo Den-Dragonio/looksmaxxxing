@@ -87,6 +87,8 @@
     bottom: 0;
     left: 0;
     padding: 0;
+    z-index: 1000;
+    background: var(--bg-secondary);
   }
 
   .sidebar-logo {
@@ -96,14 +98,41 @@
   .sidebar-nav {
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     gap: 0;
+    width: 100%;
+    margin: 0;
   }
-  
+
+  .nav-item {
+    flex: 1;
+    height: 60px;
+    padding: 0.3rem 0;
+    justify-content: center;
+    gap: 2px;
+  }
+
+  /* Show labels always on mobile */
+  .nav-label {
+    position: static;
+    opacity: 1;
+    transform: none;
+    font-size: 9px;
+    margin-top: 2px;
+    bottom: auto;
+  }
+
+  .nav-item:hover .nav-label {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Active indicator on top edge (mobile) */
   .nav-item.active::before {
     top: 0;
     left: 10%;
     width: 80%;
-    height: 4px;
+    height: 3px;
     border-radius: 0 0 4px 4px;
   }
 }

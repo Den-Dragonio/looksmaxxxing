@@ -64,6 +64,13 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  /* On mobile: full width, no side borders */
+  @media (max-width: 768px) {
+    width: 100%;
+    border-inline: none;
+    text-align: left;
+  }
 }
 
 h1,

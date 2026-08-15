@@ -89,3 +89,45 @@
     overflow-y: auto;
   }
 }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .home-page {
+    height: auto;
+  }
+
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+    gap: 1rem;
+  }
+
+  /* On mobile show silhouette but compact */
+  .silhouette-container {
+    min-height: 260px;
+    padding: 0.5rem;
+    order: 0;
+  }
+
+  /* Left widgets (Todo) go below silhouette */
+  .left-widgets {
+    order: 1;
+    height: auto;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+
+  /* Right widgets (Habit + Notes) go last */
+  .right-widgets {
+    order: 2;
+    height: auto;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+
+  .habit-tracker-container {
+    width: 100%;
+  }
+}
