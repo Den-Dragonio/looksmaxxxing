@@ -125,8 +125,6 @@ const PurchasesManager = ({ category }) => {
     setDraggedItemId(null);
   };
 
-  };
-
   // Filter items by category
   const categoryItems = category === 'all' ? items : items.filter(item => item.category === category);
   

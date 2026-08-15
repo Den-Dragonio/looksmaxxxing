@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useAppContext } from '../context/AppContext';
 import './NotesWidget.css';
 
 const DEFAULT_NOTES = [
@@ -21,6 +22,7 @@ function loadNotes() {
 }
 
 const NotesWidget = () => {
+  const { showToast } = useAppContext();
   const [notes, setNotes]           = useState(loadNotes);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transKey, setTransKey]     = useState(0);   // forces animation replay
@@ -96,8 +98,10 @@ const NotesWidget = () => {
     setEditNotes(prev => prev.map((n, idx) => idx === i ? val : n));
   const deleteEditNote = (i) =>
     setEditNotes(prev => prev.filter((_, idx) => idx !== i));
-  const addEditNote    = () =>
+  const addEditNote    = () => {
     setEditNotes(prev => [...prev, '']);
+    showToast('Новая заметка добавлена');
+  };
 
   return (
     <div className="notes-container">
