@@ -57,12 +57,20 @@ const HabitTracker = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setRoutines(loadAllRoutines());
+    const loaded = loadAllRoutines();
+    setRoutines(loaded);
+    const validIds = loaded.map(r => r.id);
     
+    // Remove old habit-tracker data (from previous version with HABITS_POOL)
+    localStorage.removeItem('habit-tracker');
+
     try {
       const savedVis = localStorage.getItem('habit-tracker-visible');
       if (savedVis) {
-        setVisibleIds(JSON.parse(savedVis));
+        const parsed = JSON.parse(savedVis);
+        // Only keep IDs that actually exist in current routines
+        const filtered = parsed.filter(id => validIds.includes(id));
+        setVisibleIds(filtered);
       }
     } catch(e) {}
   }, []);
@@ -117,7 +125,7 @@ const HabitTracker = () => {
       <div className="habit-list">
         {visibleRoutines.length === 0 && (
           <p className="text-muted" style={{textAlign: 'center', margin: '2rem 0', fontSize: '0.8rem'}}>
-            Выберите привычки для отслеживания через настройки
+            Нет привычек. Выберите их через «Настроить».
           </p>
         )}
         
