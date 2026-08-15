@@ -4,22 +4,25 @@
   grid-template-columns: 1fr 2fr;
   gap: 1.5rem;
   flex: 1;
-  min-height: 0;
-  height: 100%;
 }
 
 .purchases-left {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  overflow-y: hidden;
-  height: 100%;
 }
 
 .purchases-panel {
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
+  flex: none;
+}
+
+/* Scrollbar for left panel */
+.purchases-left::-webkit-scrollbar {
+  width: 4px;
+}
+.purchases-left::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
 }
 
 .purchases-right {

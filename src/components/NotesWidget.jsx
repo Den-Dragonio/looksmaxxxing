@@ -108,12 +108,17 @@ const NotesWidget = () => {
 
         <div className="notes-content">
           {notes.length > 0 ? (
-            <p
-              key={transKey}
-              className={`notes-text slide-${dir}`}
-            >
-              {notes[currentIndex]}
-            </p>
+            notes.map((note, idx) => {
+              const isActive = idx === currentIndex;
+              return (
+                <p
+                  key={isActive ? `${idx}-${transKey}` : idx}
+                  className={`notes-text ${isActive ? `active slide-${dir}` : ''}`}
+                >
+                  {note}
+                </p>
+              );
+            })
           ) : (
             <p className="notes-empty">Нет заметок — добавь через edit</p>
           )}

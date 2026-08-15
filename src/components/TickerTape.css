@@ -37,3 +37,8 @@
     transform: translateX(-50%);
   }
 }
+
+.ticker-todos {
+  color: var(--accent);
+  font-weight: 500;
+}

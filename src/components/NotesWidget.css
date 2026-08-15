@@ -25,10 +25,9 @@
 .notes-content {
   text-align: center;
   flex: 1;
-  min-height: 44px;
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   overflow: hidden;
 }
 
@@ -43,9 +42,20 @@
 }
 
 .notes-text {
+  grid-area: 1 / 1;
   font-size: 0.875rem;
   margin: 0;
   color: var(--text-primary);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  width: 100%;
+}
+
+.notes-text.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* 'right' = navigating to next → new note slides in from right */

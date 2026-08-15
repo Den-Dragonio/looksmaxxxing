@@ -15,6 +15,7 @@ const PurchasesManager = ({ category }) => {
   const [items, setItems] = useState([]);
   const [newItemName, setNewItemName] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
+  const [sortBy, setSortBy] = useState('time-asc'); // time-asc, time-desc, price-asc, price-desc
   
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -124,25 +125,27 @@ const PurchasesManager = ({ category }) => {
     setDraggedItemId(null);
   };
 
-  const toggleBoughtStatus = (e, item) => {
-    e.stopPropagation();
-    const targetStatus = item.status === 'bought' ? 'pending' : 'bought';
-    setItems(prev => prev.map(i => 
-      i.id === item.id ? { ...i, status: targetStatus } : i
-    ));
-    showToast(targetStatus === 'bought' ? 'Перемещено в куплено' : 'Возвращено в покупки');
   };
 
   // Filter items by category
   const categoryItems = category === 'all' ? items : items.filter(item => item.category === category);
   
   // Fix missing status on older items
-  const validItems = categoryItems.map(item => ({...item, status: item.status || 'pending'}));
+  let validItems = categoryItems.map(item => ({...item, status: item.status || 'pending'}));
+  
+  // Apply Sorting
+  validItems.sort((a, b) => {
+    if (sortBy === 'price-asc') return a.price - b.price;
+    if (sortBy === 'price-desc') return b.price - a.price;
+    if (sortBy === 'time-desc') return parseInt(b.id) - parseInt(a.id);
+    return parseInt(a.id) - parseInt(b.id); // time-asc (default)
+  });
   
   const pendingItems = validItems.filter(item => item.status === 'pending');
   const boughtItems = validItems.filter(item => item.status === 'bought');
   
   const pendingSum = pendingItems.reduce((sum, item) => sum + item.price, 0);
+  const boughtSum = boughtItems.reduce((sum, item) => sum + item.price, 0);
 
   const renderTable = (listItems, isBought) => {
     if (listItems.length === 0) {
@@ -152,7 +155,6 @@ const PurchasesManager = ({ category }) => {
       <table className="purchases-table">
         <thead>
           <tr>
-            <th style={{ width: '40px' }}></th>
             <th>Наименование</th>
             <th style={{textAlign: 'right'}}>Цена (€)</th>
           </tr>
@@ -166,15 +168,6 @@ const PurchasesManager = ({ category }) => {
               draggable
               onDragStart={(e) => handleDragStart(e, item.id)}
             >
-              <td style={{ width: '40px', padding: '0.5rem 0.75rem' }}>
-                <button 
-                  className={`pm-check-btn ${isBought ? 'checked' : ''}`}
-                  onClick={(e) => toggleBoughtStatus(e, item)}
-                  title={isBought ? "Вернуть в список" : "Отметить купленным"}
-                >
-                  {isBought ? '✓' : ''}
-                </button>
-              </td>
               <td className={isBought ? 'bought-text' : ''}>
                 {item.name}
                 {category === 'all' && item.category && (
@@ -193,7 +186,29 @@ const PurchasesManager = ({ category }) => {
 
   return (
     <div className="purchases-manager">
-      <h3 className="section-title">Список покупок {category === 'all' ? '(Все)' : ''}</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h3 className="section-title" style={{ margin: 0, padding: 0, border: 'none' }}>
+          Список покупок {category === 'all' ? '(Все)' : ''}
+        </h3>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button 
+            className="action-button"
+            style={{ padding: '0.2rem 0.5rem', fontSize: '1rem', background: sortBy.startsWith('price') ? 'var(--accent)' : 'transparent', border: '1px solid var(--border)' }}
+            onClick={() => setSortBy(prev => prev === 'price-desc' ? 'price-asc' : 'price-desc')}
+            title="Сортировка по цене"
+          >
+            {sortBy === 'price-desc' ? '💶⬇️' : '💶⬆️'}
+          </button>
+          <button 
+            className="action-button"
+            style={{ padding: '0.2rem 0.5rem', fontSize: '1rem', background: sortBy.startsWith('time') ? 'var(--accent)' : 'transparent', border: '1px solid var(--border)' }}
+            onClick={() => setSortBy(prev => prev === 'time-desc' ? 'time-asc' : 'time-desc')}
+            title="Сортировка по времени"
+          >
+            {sortBy === 'time-desc' ? '🕒⬇️' : '🕒⬆️'}
+          </button>
+        </div>
+      </div>
       
       {/* PENDING LIST - DROPPABLE */}
       <div 
@@ -234,7 +249,8 @@ const PurchasesManager = ({ category }) => {
       </form>
 
       {/* BOUGHT LIST - DROPPABLE */}
-      <h4 className="section-subtitle mt-2">Уже куплено</h4>
+      <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '1rem 0' }} />
+      <h4 className="section-subtitle mt-2" style={{ borderBottom: 'none', paddingBottom: 0 }}>Уже куплено</h4>
       <div 
         className="purchases-list-container bought-container droppable-area custom-scrollbar"
         onDragOver={handleDragOver}
@@ -242,6 +258,14 @@ const PurchasesManager = ({ category }) => {
       >
         {renderTable(boughtItems, true)}
       </div>
+
+      {/* FIXED BOUGHT TOTAL SUM */}
+      {boughtSum > 0 && (
+        <div className="pm-total-sum" style={{marginTop: '0.5rem'}}>
+          <span>Всего потрачено:</span>
+          <span className="pm-total-val" style={{color: 'var(--text-secondary)'}}>{boughtSum.toFixed(2)} €</span>
+        </div>
+      )}
 
       {/* EDIT MODAL */}
       {modalOpen && createPortal(

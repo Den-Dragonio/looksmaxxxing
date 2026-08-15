@@ -5,8 +5,10 @@ const TickerTape = () => {
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
   const [rates, setRates] = useState(null);
+  const [todayTodos, setTodayTodos] = useState([]);
 
   useEffect(() => {
+    let tickCount = 0;
     const updateTime = () => {
       const now = new Date();
       const timeStr = now.toLocaleTimeString('ru-RU', {
@@ -23,6 +25,20 @@ const TickerTape = () => {
       });
       setTime(timeStr);
       setDate(dateStr);
+
+      // Check todos every 5 ticks (5 seconds) to avoid constant parsing
+      if (tickCount % 5 === 0) {
+        try {
+          const raw = localStorage.getItem('looksmaxxing_todos');
+          if (raw) {
+            const allTodos = JSON.parse(raw);
+            const todayStr = new Date().toISOString().split('T')[0];
+            const dueToday = allTodos.filter(t => !t.done && t.deadline === todayStr);
+            setTodayTodos(dueToday);
+          }
+        } catch (e) {}
+      }
+      tickCount++;
     };
 
     updateTime();
@@ -57,6 +73,12 @@ const TickerTape = () => {
           <span className="ticker-item">💶 1 EUR = 51.41 ₴</span>
           <span className="ticker-item">💵 1 USD = 44.70 ₴</span>
         </>
+      )}
+      
+      {todayTodos.length > 0 && (
+        <span className="ticker-item ticker-todos">
+          🔥 Задачи на сегодня: {todayTodos.map(t => t.text).join(' • ')}
+        </span>
       )}
     </div>
   );

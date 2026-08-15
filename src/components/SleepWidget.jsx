@@ -156,12 +156,12 @@ const SleepWidget = () => {
 
   // Sorting history ensures chart data is chronologically ordered
   const chartData = sleepHistory.slice(-period);
-  const hasEnoughData = chartData.length > 1;
+  const hasEnoughData = sleepHistory.length >= 7;
   
   const durations = chartData.map(d => d.duration);
-  const avg = hasEnoughData ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
-  const min = hasEnoughData ? Math.min(...durations) : 0;
-  const max = hasEnoughData ? Math.max(...durations) : 0;
+  const avg = durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
+  const min = durations.length > 0 ? Math.min(...durations) : 0;
+  const max = durations.length > 0 ? Math.max(...durations) : 0;
 
   return (
     <div className="sleep-dashboard">
@@ -178,8 +178,9 @@ const SleepWidget = () => {
         </div>
 
         {!hasEnoughData ? (
-          <div className="sleep-no-data" style={{ minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p className="text-muted" style={{ textAlign: 'center', margin: 0 }}>Недостаточно данных для графика.</p>
+          <div className="sleep-no-data" style={{ minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
+            <p className="text-muted" style={{ textAlign: 'center', margin: 0 }}>Н/А</p>
+            <p className="text-muted" style={{ textAlign: 'center', fontSize: '0.8rem', margin: 0 }}>Соберите минимум 7 дней данных.</p>
           </div>
         ) : (
           <>
@@ -224,8 +225,9 @@ const SleepWidget = () => {
             <button 
               className="action-button" 
               style={{ padding: '0.2rem 0.5rem' }} 
-              onClick={() => setOffsetDays(d => d - 1)}
-              title="Предыдущий день"
+              onClick={() => setOffsetDays(-1)}
+              disabled={offsetDays === -1}
+              title="Предыдущий день (Вчера)"
             >
               &lt;
             </button>
@@ -233,9 +235,9 @@ const SleepWidget = () => {
             <button 
               className="action-button" 
               style={{ padding: '0.2rem 0.5rem' }} 
-              onClick={() => setOffsetDays(d => d + 1)}
-              disabled={offsetDays >= 0}
-              title="Следующий день"
+              onClick={() => setOffsetDays(0)}
+              disabled={offsetDays === 0}
+              title="Следующий день (Сегодня)"
             >
               &gt;
             </button>
