@@ -6,7 +6,7 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('looksmaxxing_theme') || 'light';
+    return localStorage.getItem('looksmaxxing_theme') || 'system';
   });
 
   const [toastSettings, setToastSettings] = useState(() => {
@@ -24,10 +24,24 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('looksmaxxing_theme', theme);
-    if (theme === 'dark') {
-      document.body.classList.add('dark-theme');
+    
+    const applyTheme = (isDark) => {
+      if (isDark) {
+        document.body.classList.add('dark-theme');
+      } else {
+        document.body.classList.remove('dark-theme');
+      }
+    };
+
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      applyTheme(mediaQuery.matches);
+      
+      const handleChange = (e) => applyTheme(e.matches);
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
     } else {
-      document.body.classList.remove('dark-theme');
+      applyTheme(theme === 'dark');
     }
   }, [theme]);
 

@@ -8,7 +8,8 @@ const Settings = () => {
 
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
-    showToast(`Тема изменена на ${e.target.value === 'dark' ? 'тёмную' : 'светлую'}`);
+    const themeName = e.target.value === 'dark' ? 'тёмную' : (e.target.value === 'light' ? 'светлую' : 'системную');
+    showToast(`Тема изменена на ${themeName}`);
   };
 
   const handleToastToggle = (e) => {
@@ -36,7 +37,7 @@ const Settings = () => {
         <p className="text-muted">Управление вашим аккаунтом и приложением</p>
       </header>
       
-      <div className="dashboard-content">
+      <div className="settings-content">
         <ul className="settings-list">
           <li className="settings-item">
             <div className="settings-info">
@@ -70,6 +71,7 @@ const Settings = () => {
               <p className="text-muted">Выбор светлой/темной темы.</p>
             </div>
             <select className="settings-select" value={theme} onChange={handleThemeChange}>
+              <option value="system">Системная</option>
               <option value="light">Светлая</option>
               <option value="dark">Темная</option>
             </select>
