@@ -24,15 +24,18 @@ const loadAllRoutines = () => {
     try {
       const raw = localStorage.getItem(`routine-${cat}`);
       if (!raw) return;
-      JSON.parse(raw).forEach(r => {
-        // Only consider active tracking routines (they don't have a specific inactive flag, but check if they are generally valid)
-        all.push({
-          ...r,
-          uid: `${cat}__${r.id}`,
-          emoji: CAT_EMOJI[cat] || '📌',
-          category: cat,
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        parsed.forEach(r => {
+          // Only consider active tracking routines (they don't have a specific inactive flag, but check if they are generally valid)
+          all.push({
+            ...r,
+            uid: `${cat}__${r.id}`,
+            emoji: CAT_EMOJI[cat] || '📌',
+            category: cat,
+          });
         });
-      });
+      }
     } catch (e) {}
   });
   return all;

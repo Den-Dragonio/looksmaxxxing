@@ -32,9 +32,11 @@ const TickerTape = () => {
           const raw = localStorage.getItem('looksmaxxing_todos');
           if (raw) {
             const allTodos = JSON.parse(raw);
-            const todayStr = new Date().toISOString().split('T')[0];
-            const dueToday = allTodos.filter(t => !t.done && t.deadline === todayStr);
-            setTodayTodos(dueToday);
+            if (Array.isArray(allTodos)) {
+              const todayStr = new Date().toISOString().split('T')[0];
+              const dueToday = allTodos.filter(t => !t.done && t.deadline === todayStr);
+              setTodayTodos(dueToday);
+            }
           }
         } catch (e) {}
       }
