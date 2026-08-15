@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useAppContext } from '../context/AppContext';
 import './RoutineWidget.css';
 
 // Initial data for different categories
@@ -48,6 +49,7 @@ const generateNext14Days = () => {
 const DATES = generateNext14Days();
 
 const RoutineWidget = ({ category }) => {
+  const { showToast } = useAppContext();
   const storageKey = `routine-${category}`;
   
   const [routines, setRoutines] = useState(() => {
@@ -112,6 +114,7 @@ const RoutineWidget = ({ category }) => {
       setRoutines(prev => prev.map(r => 
         r.id === editingId ? { ...r, title, description: desc, freq } : r
       ));
+      showToast('Рутина обновлена');
     } else {
       setRoutines(prev => [...prev, {
         id: Date.now().toString(),
@@ -120,12 +123,14 @@ const RoutineWidget = ({ category }) => {
         freq,
         history: {}
       }]);
+      showToast('Рутина добавлена');
     }
     closeModal();
   };
 
   const deleteRoutine = (id) => {
     setRoutines(prev => prev.filter(r => r.id !== id));
+    showToast('Рутина удалена');
     closeModal();
   };
 
@@ -190,6 +195,7 @@ const RoutineWidget = ({ category }) => {
                   type="text" 
                   value={title} 
                   onChange={e => setTitle(e.target.value)} 
+                  onKeyDown={e => e.key === 'Enter' && saveRoutine()}
                   placeholder="Название..."
                 />
               </div>
@@ -198,7 +204,13 @@ const RoutineWidget = ({ category }) => {
                 <label>Описание применения</label>
                 <textarea 
                   value={desc} 
-                  onChange={e => setDesc(e.target.value)} 
+                  onChange={e => setDesc(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      saveRoutine();
+                    }
+                  }}
                   placeholder="Детали..."
                   rows={3}
                 />

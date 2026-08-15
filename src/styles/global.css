@@ -119,3 +119,26 @@ h1, h2, h3, h4 {
 .action-button:active {
   transform: scale(0.98);
 }
+
+/* Dark Theme Variables */
+body.dark-theme {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #9ca3af;
+  --accent: #2563eb;
+  --accent-hover: #3b82f6;
+  --border: #333333;
+  --glass-bg: rgba(30, 30, 30, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .glass-panel {
+  background: var(--glass-bg, rgba(30, 30, 30, 0.8));
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+}
+
+body.dark-theme .silhouette-svg path, 
+body.dark-theme .silhouette-svg ellipse {
+  fill: #e0e0e0;
+}

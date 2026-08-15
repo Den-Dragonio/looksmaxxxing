@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useAppContext } from '../context/AppContext';
 import './SubscriptionsWidget.css';
 
 const DEFAULT_SUBS = [
@@ -9,6 +10,7 @@ const DEFAULT_SUBS = [
 ];
 
 const SubscriptionsWidget = () => {
+  const { showToast } = useAppContext();
   const [subs, setSubs] = useState(() => {
     try {
       const raw = localStorage.getItem('subs-list');
@@ -63,6 +65,7 @@ const SubscriptionsWidget = () => {
       setSubs(prev => prev.map(s => 
         s.id === editingId ? { ...s, name, price: numPrice, active } : s
       ));
+      showToast('Подписка обновлена');
     } else {
       setSubs(prev => [...prev, {
         id: Date.now().toString(),
@@ -70,12 +73,14 @@ const SubscriptionsWidget = () => {
         price: numPrice,
         active
       }]);
+      showToast('Подписка добавлена');
     }
     closeModal();
   };
 
   const deleteSub = (id) => {
     setSubs(prev => prev.filter(s => s.id !== id));
+    showToast('Подписка удалена');
     closeModal();
   };
 
@@ -85,7 +90,7 @@ const SubscriptionsWidget = () => {
     <div className="subs-widget">
       <div className="subs-header">
         <h2>Подписки</h2>
-        <span className="subs-total">${total}/мес</span>
+        <span className="subs-total">{total}€/мес</span>
       </div>
 
       <div className="subs-list">
@@ -103,7 +108,7 @@ const SubscriptionsWidget = () => {
               <div className="subs-info" onClick={() => openModal(sub)}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
                   <span className="subs-name">{sub.name}</span>
-                  <span className="subs-price">${sub.price}</span>
+                  <span className="subs-price">{sub.price}€</span>
                 </div>
                 <button className="subs-inline-edit">edit</button>
               </div>
@@ -127,14 +132,16 @@ const SubscriptionsWidget = () => {
                 type="text" 
                 placeholder="Название"
                 value={name} 
-                onChange={e => setName(e.target.value)} 
+                onChange={e => setName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && saveSub()}
                 className="subs-input"
               />
               <input 
                 type="number" 
-                placeholder="Цена ($)"
+                placeholder="Цена (€)"
                 value={price} 
-                onChange={e => setPrice(e.target.value)} 
+                onChange={e => setPrice(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && saveSub()}
                 className="subs-input"
               />
             </div>

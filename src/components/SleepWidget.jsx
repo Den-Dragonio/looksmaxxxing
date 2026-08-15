@@ -111,7 +111,7 @@ const SleepWidget = () => {
   }, [bedtime, wakeup]);
 
   const chartData = sleepHistory.slice(-period);
-  const hasEnoughData = chartData.length > 0;
+  const hasEnoughData = chartData.length > 1;
   
   const durations = chartData.map(d => d.duration);
   const avg = hasEnoughData ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
@@ -133,9 +133,8 @@ const SleepWidget = () => {
         </div>
 
         {!hasEnoughData ? (
-          <div className="sleep-no-data">
-            <p>Недостаточно данных для графика.</p>
-            <span>Заполняйте время сна каждый день, чтобы увидеть статистику за выбранный период.</span>
+          <div className="sleep-no-data" style={{ minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <p className="text-muted" style={{ textAlign: 'center', margin: 0 }}>Недостаточно данных для графика.</p>
           </div>
         ) : (
           <>
