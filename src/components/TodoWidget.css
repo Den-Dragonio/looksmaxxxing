@@ -103,29 +103,7 @@
 body.dark-theme .todo-item:hover { background: rgba(255, 255, 255, 0.05); }
 .todo-item.done .todo-text { text-decoration: line-through; opacity: 0.5; }
 
-/* ══ Checkbox ═════════════════════════════════════════════════ */
-.todo-checkbox {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  cursor: pointer;
-  background: var(--bg-primary);
-  transition: all 0.2s;
-  margin-top: 1px;
-}
-
-.todo-item.done .todo-checkbox { background: var(--accent); }
-
-.checkmark {
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
+/* Checkbox removed, pure drag-and-drop */
 
 /* ══ Content ══════════════════════════════════════════════════ */
 .todo-content {

@@ -7,13 +7,14 @@ const MAX_TITLE_LEN = 80;
 const MAX_DESC_LEN  = 300;
 
 const PRIORITY_CONFIG = {
-  high:   { label: 'Высокий', color: '#ef4444', dot: '🔴' },
-  medium: { label: 'Средний', color: '#f59e0b', dot: '🟡' },
+  none:   { label: 'Без приоритета', color: 'transparent', dot: '⚪' },
   low:    { label: 'Низкий',  color: '#22c55e', dot: '🟢' },
+  medium: { label: 'Средний', color: '#f59e0b', dot: '🟡' },
+  high:   { label: 'Высокий', color: '#ef4444', dot: '🔴' },
 };
 
 // Higher priority = lower sort number
-const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
+const PRIORITY_ORDER = { high: 0, medium: 1, low: 2, none: 3 };
 
 const TodoWidget = () => {
   const { showToast } = useAppContext();
@@ -25,7 +26,7 @@ const TodoWidget = () => {
   const [draftText, setDraftText]         = useState('');
   const [draftDesc, setDraftDesc]         = useState('');
   const [draftDeadline, setDraftDeadline] = useState('');
-  const [draftPriority, setDraftPriority] = useState('medium');
+  const [draftPriority, setDraftPriority] = useState('none');
   const inputRef = useRef(null);
 
   const [draggedId, setDraggedId] = useState(null);
@@ -48,7 +49,7 @@ const TodoWidget = () => {
     setDraftText('');
     setDraftDesc('');
     setDraftDeadline('');
-    setDraftPriority('medium');
+    setDraftPriority('none');
     setIsModalOpen(true);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
@@ -58,7 +59,7 @@ const TodoWidget = () => {
     setDraftText(todo.text);
     setDraftDesc(todo.desc || '');
     setDraftDeadline(todo.deadline || '');
-    setDraftPriority(todo.priority || 'medium');
+    setDraftPriority(todo.priority || 'none');
     setIsModalOpen(true);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
@@ -69,7 +70,7 @@ const TodoWidget = () => {
     setDraftText('');
     setDraftDesc('');
     setDraftDeadline('');
-    setDraftPriority('medium');
+    setDraftPriority('none');
   };
 
   const handleSave = () => {
@@ -109,11 +110,6 @@ const TodoWidget = () => {
     closeModal();
   };
 
-  const toggleDone = (id, e) => {
-    e.stopPropagation();
-    setTodos(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t));
-  };
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSave(); }
     if (e.key === 'Escape') closeModal();
@@ -123,6 +119,7 @@ const TodoWidget = () => {
   const handleDragStart = (e, id) => {
     setDraggedId(id);
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', id);
   };
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -138,14 +135,15 @@ const TodoWidget = () => {
   // Sort pending by priority then by creation order
   const sorted = (list) =>
     [...list].sort((a, b) =>
-      (PRIORITY_ORDER[a.priority ?? 'medium'] ?? 1) - (PRIORITY_ORDER[b.priority ?? 'medium'] ?? 1)
+      (PRIORITY_ORDER[a.priority ?? 'none'] ?? 3) - (PRIORITY_ORDER[b.priority ?? 'none'] ?? 3)
     );
 
   const pendingTodos = sorted(todos.filter(t => !t.done));
   const doneTodos    = todos.filter(t => t.done);
 
   const PriorityDot = ({ priority }) => {
-    const cfg = PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.medium;
+    if (priority === 'none') return null; // hide dot if none
+    const cfg = PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.none;
     return (
       <span
         className="priority-dot"
@@ -163,9 +161,6 @@ const TodoWidget = () => {
       onDragEnd={() => setDraggedId(null)}
       onClick={() => openEditModal(todo)}
     >
-      <div className="todo-checkbox" onClick={(e) => toggleDone(todo.id, e)}>
-        {isDone && <span className="checkmark">✓</span>}
-      </div>
       <div className="todo-content">
         <div className="todo-title-row">
           {!isDone && <PriorityDot priority={todo.priority} />}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './SleepWidget.css';
 
 const formatDuration = (hoursDec) => {
@@ -53,21 +53,30 @@ const generateGithubCalendar = () => {
 const { weeks: GITHUB_WEEKS, monthLabels: GITHUB_MONTHS } = generateGithubCalendar();
 
 const SleepWidget = () => {
-  const [bedtime, setBedtime] = useState('23:00');
-  const [wakeup, setWakeup] = useState('07:00');
-  
   const [period, setPeriod] = useState(7);
   const [sleepHistory, setSleepHistory] = useState([]);
 
+  // Date selection (0 = today, -1 = yesterday, etc.)
+  const [offsetDays, setOffsetDays] = useState(0);
+
+  // Derive the active date
+  const activeDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d;
+  }, [offsetDays]);
+
+  const activeDateId = activeDate.toISOString().split('T')[0];
+  const activeDateDisplay = activeDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'numeric' });
+  const activeDateTitle = activeDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+
+  // Currently editing times for active date
+  const [bedtime, setBedtime] = useState('23:00');
+  const [wakeup, setWakeup] = useState('07:00');
+
+  // 1. Initial Load
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('sleep-times');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.bedtime) setBedtime(parsed.bedtime);
-        if (parsed.wakeup) setWakeup(parsed.wakeup);
-      }
-      
       const history = localStorage.getItem('sleep-history');
       if (history) {
         setSleepHistory(JSON.parse(history));
@@ -75,9 +84,24 @@ const SleepWidget = () => {
     } catch {}
   }, []);
 
+  // 2. When active date changes, load its times or defaults
   useEffect(() => {
-    localStorage.setItem('sleep-times', JSON.stringify({ bedtime, wakeup }));
-  }, [bedtime, wakeup]);
+    const entry = sleepHistory.find(item => item.dateId === activeDateId);
+    if (entry) {
+      setBedtime(entry.bedtime || '23:00');
+      setWakeup(entry.wakeup || '07:00');
+    } else {
+      // Default to what was saved last, or 23/07
+      try {
+        const lastTimes = JSON.parse(localStorage.getItem('sleep-last-times'));
+        setBedtime(lastTimes?.bedtime || '23:00');
+        setWakeup(lastTimes?.wakeup || '07:00');
+      } catch {
+        setBedtime('23:00');
+        setWakeup('07:00');
+      }
+    }
+  }, [activeDateId, sleepHistory]);
 
   const getDurationHours = () => {
     if (!bedtime || !wakeup) return 0;
@@ -91,25 +115,36 @@ const SleepWidget = () => {
 
   const currentDurationFormatted = formatDuration(getDurationHours());
 
-  // Save current sleep to history on change (simplified logic for demonstration)
-  // Realistically, it should save when user explicitly presses "Save" or auto-save for today's date
+  // Save current sleep to history on change
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
     const duration = getDurationHours();
     if (duration > 0) {
+      // Also remember last used times
+      localStorage.setItem('sleep-last-times', JSON.stringify({ bedtime, wakeup }));
+
       setSleepHistory(prev => {
-        const filtered = prev.filter(item => item.dateId !== today);
+        // If data is identical, don't trigger re-render cycle
+        const existing = prev.find(item => item.dateId === activeDateId);
+        if (existing && existing.duration === duration && existing.bedtime === bedtime && existing.wakeup === wakeup) {
+          return prev;
+        }
+
+        const filtered = prev.filter(item => item.dateId !== activeDateId);
         const next = [...filtered, { 
-          dateId: today, 
-          dateDisplay: new Date().toLocaleDateString('ru-RU', {day: 'numeric', month: 'numeric'}),
+          dateId: activeDateId, 
+          dateDisplay: activeDateDisplay,
+          bedtime,
+          wakeup,
           duration 
-        }];
+        }].sort((a, b) => a.dateId.localeCompare(b.dateId)); // keep sorted by date
+
         localStorage.setItem('sleep-history', JSON.stringify(next));
         return next;
       });
     }
-  }, [bedtime, wakeup]);
+  }, [bedtime, wakeup, activeDateId, activeDateDisplay]);
 
+  // Sorting history ensures chart data is chronologically ordered
   const chartData = sleepHistory.slice(-period);
   const hasEnoughData = chartData.length > 1;
   
@@ -175,11 +210,30 @@ const SleepWidget = () => {
       {/* 2. TODAY'S INPUT */}
       <div className="sleep-section">
         <div className="sleep-header">
-          <h3>Сон ({new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })})</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button 
+              className="action-button" 
+              style={{ padding: '0.2rem 0.5rem' }} 
+              onClick={() => setOffsetDays(d => d - 1)}
+              title="Предыдущий день"
+            >
+              &lt;
+            </button>
+            <h3 style={{ margin: 0, minWidth: '120px', textAlign: 'center' }}>{activeDateTitle}</h3>
+            <button 
+              className="action-button" 
+              style={{ padding: '0.2rem 0.5rem' }} 
+              onClick={() => setOffsetDays(d => d + 1)}
+              disabled={offsetDays >= 0}
+              title="Следующий день"
+            >
+              &gt;
+            </button>
+          </div>
           <span className="sleep-duration">Итог: <strong>{currentDurationFormatted}</strong></span>
         </div>
 
-        <div className="sleep-cards">
+        <div className="sleep-cards" style={{ marginTop: '1rem' }}>
           <div className="sleep-card">
             <div className="sleep-card-icon">🌙</div>
             <div className="sleep-card-content">
@@ -225,12 +279,23 @@ const SleepWidget = () => {
             {GITHUB_WEEKS.map((week, wIndex) => (
               <div key={wIndex} className="github-col">
                 {week.map((day, dIndex) => {
-                  // If sleep is recorded for this day, we could color it. But for now, just empty squares as requested.
+                  const dateId = day.date.toISOString().split('T')[0];
+                  const recorded = sleepHistory.find(h => h.dateId === dateId);
+                  
+                  // Color based on duration
+                  let cls = 'github-square';
+                  if (recorded) {
+                    if (recorded.duration < 6) cls += ' level-1';
+                    else if (recorded.duration < 7.5) cls += ' level-2';
+                    else if (recorded.duration < 9) cls += ' level-3';
+                    else cls += ' level-4';
+                  }
+
                   return (
                     <div 
                       key={dIndex} 
-                      className="github-square"
-                      title={day.title} // This adds the tooltip with delay!
+                      className={cls}
+                      title={`${day.title}${recorded ? ` — ${formatDuration(recorded.duration)}` : ''}`}
                     ></div>
                   );
                 })}
