@@ -175,7 +175,7 @@ const SleepWidget = () => {
       {/* 2. TODAY'S INPUT */}
       <div className="sleep-section">
         <div className="sleep-header">
-          <h3>Сегодняшний сон</h3>
+          <h3>Сон ({new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })})</h3>
           <span className="sleep-duration">Итог: <strong>{currentDurationFormatted}</strong></span>
         </div>
 

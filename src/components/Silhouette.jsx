@@ -34,7 +34,7 @@ const Silhouette = () => {
       // hair.svg rightmost visible area ≈ x=415, y=170
       start: { x: 410, y: 170 },
       mid:   { x: 458, y: 148 },
-      end:   { x: 545, y: 148 },
+      end:   { x: 565, y: 148 },
       align: 'start',
     },
     {
@@ -45,7 +45,7 @@ const Silhouette = () => {
       // left edge of face ellipse: 246.728 - 106.077 = 140.6
       start: { x: 141, y: 230 },
       mid:   { x: 74,  y: 210 },
-      end:   { x: -18, y: 210 },
+      end:   { x: 0,   y: 210 },
       align: 'end',
     },
     {
@@ -55,7 +55,7 @@ const Silhouette = () => {
       link: '/body',
       start: { x: 425, y: 555 },
       mid:   { x: 474, y: 535 },
-      end:   { x: 632, y: 535 },   // длина гориз. сегмента = ширина текста "Тело"
+      end:   { x: 560, y: 535 },   // длина гориз. сегмента
       align: 'start',
     },
   ];
@@ -75,74 +75,76 @@ const Silhouette = () => {
           className="silhouette-svg"
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* ── 1. BODY (bottom layer) ── */}
-          <g
-            className={`body-part ${hoveredPart === 'body' ? 'hovered' : ''}`}
-            onClick={() => navigate('/body')}
-            onMouseEnter={() => setHoveredPart('body')}
-            onMouseLeave={() => setHoveredPart(null)}
-          >
-            <g transform={`translate(${BODY_TX}, ${BODY_TY}) scale(${BODY_SCALE})`}>
-              <path d={BODY_PATH} fill="var(--text-primary)" />
+          <g transform="translate(50, 0)">
+            {/* ── 1. BODY (bottom layer) ── */}
+            <g
+              className={`body-part ${hoveredPart === 'body' ? 'hovered' : ''}`}
+              onClick={() => navigate('/body')}
+              onMouseEnter={() => setHoveredPart('body')}
+              onMouseLeave={() => setHoveredPart(null)}
+            >
+              <g transform={`translate(${BODY_TX}, ${BODY_TY}) scale(${BODY_SCALE})`}>
+                <path d={BODY_PATH} fill="var(--text-primary)" />
+              </g>
             </g>
-          </g>
 
-          {/* ── 2. FACE (middle layer — опускаем вниз, заходит на тело) ── */}
-          <g
-            className={`body-part ${hoveredPart === 'face' ? 'hovered' : ''}`}
-            onClick={() => navigate('/face')}
-            onMouseEnter={() => setHoveredPart('face')}
-            onMouseLeave={() => setHoveredPart(null)}
-            transform="translate(0, 37)"
-          >
-            <ellipse
-              cx="246.728" cy="199.699"
-              rx="106.077" ry="141.801"
-              fill="var(--text-primary)"
-            />
-          </g>
-
-          {/* ── 3. HAIR (top layer — влево и выше) ── */}
-          <g
-            className={`body-part ${hoveredPart === 'hair' ? 'hovered' : ''}`}
-            onClick={() => navigate('/hair')}
-            onMouseEnter={() => setHoveredPart('hair')}
-            onMouseLeave={() => setHoveredPart(null)}
-            transform="translate(-28, -18)"
-          >
-            <path d={HAIR_PATH} fill="var(--text-primary)" />
-          </g>
-
-          {/* ── Animated annotation lines & labels ── */}
-          {parts.map(part => (
-            <g key={part.id}>
-              <path
-                d={`M ${part.start.x} ${part.start.y} L ${part.mid.x} ${part.mid.y} L ${part.end.x} ${part.end.y}`}
-                className={`animated-line ${hoveredPart === part.id ? 'active' : ''}`}
+            {/* ── 2. FACE (middle layer — опускаем вниз, заходит на тело) ── */}
+            <g
+              className={`body-part ${hoveredPart === 'face' ? 'hovered' : ''}`}
+              onClick={() => navigate('/face')}
+              onMouseEnter={() => setHoveredPart('face')}
+              onMouseLeave={() => setHoveredPart(null)}
+              transform="translate(0, 37)"
+            >
+              <ellipse
+                cx="246.728" cy="199.699"
+                rx="106.077" ry="141.801"
+                fill="var(--text-primary)"
               />
-              <text
-                x={part.align === 'end' ? part.end.x - 4 : part.end.x + 4}
-                y={part.mid.y - 8}
-                className={`animated-title ${hoveredPart === part.id ? 'active' : ''}`}
-                style={{ transitionDelay: hoveredPart === part.id ? '0.35s' : '0s' }}
-                textAnchor={part.align === 'end' ? 'end' : 'start'}
-              >
-                {part.title}
-              </text>
-              {part.subitems.map((sub, idx) => (
+            </g>
+
+            {/* ── 3. HAIR (top layer — влево и выше) ── */}
+            <g
+              className={`body-part ${hoveredPart === 'hair' ? 'hovered' : ''}`}
+              onClick={() => navigate('/hair')}
+              onMouseEnter={() => setHoveredPart('hair')}
+              onMouseLeave={() => setHoveredPart(null)}
+              transform="translate(-28, -18)"
+            >
+              <path d={HAIR_PATH} fill="var(--text-primary)" />
+            </g>
+
+            {/* ── Animated annotation lines & labels ── */}
+            {parts.map(part => (
+              <g key={part.id}>
+                <path
+                  d={`M ${part.start.x} ${part.start.y} L ${part.mid.x} ${part.mid.y} L ${part.end.x} ${part.end.y}`}
+                  className={`animated-line ${hoveredPart === part.id ? 'active' : ''}`}
+                />
                 <text
-                  key={idx}
-                  x={part.align === 'end' ? part.end.x - 4 : part.end.x + 4}
-                  y={part.mid.y + 9 + idx * 17}
-                  className={`animated-subtext ${hoveredPart === part.id ? 'active' : ''}`}
-                  style={{ transitionDelay: hoveredPart === part.id ? `${0.7 + idx * 0.28}s` : '0s' }}
+                  x={part.align === 'end' ? part.mid.x - 8 : part.mid.x + 8}
+                  y={part.mid.y - 8}
+                  className={`animated-title ${hoveredPart === part.id ? 'active' : ''}`}
+                  style={{ transitionDelay: hoveredPart === part.id ? '0.35s' : '0s' }}
                   textAnchor={part.align === 'end' ? 'end' : 'start'}
                 >
-                  {part.align === 'end' ? `${sub} •` : `• ${sub}`}
+                  {part.title}
                 </text>
-              ))}
-            </g>
-          ))}
+                {part.subitems.map((sub, idx) => (
+                  <text
+                    key={idx}
+                    x={part.align === 'end' ? part.mid.x - 8 : part.mid.x + 8}
+                    y={part.mid.y + 20 + idx * 17}
+                    className={`animated-subtext ${hoveredPart === part.id ? 'active' : ''}`}
+                    style={{ transitionDelay: hoveredPart === part.id ? `${0.7 + idx * 0.28}s` : '0s' }}
+                    textAnchor={part.align === 'end' ? 'end' : 'start'}
+                  >
+                    {part.align === 'end' ? `${sub} •` : `• ${sub}`}
+                  </text>
+                ))}
+              </g>
+            ))}
+          </g>
         </svg>
       </div>
     </div>
