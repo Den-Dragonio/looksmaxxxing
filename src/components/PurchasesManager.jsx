@@ -3,6 +3,13 @@ import { createPortal } from 'react-dom';
 import { useAppContext } from '../context/AppContext';
 import './PurchasesManager.css';
 
+const CAT_LABELS = {
+  hair: 'волосы',
+  face: 'лицо',
+  body: 'тело',
+  other: 'другое'
+};
+
 const PurchasesManager = ({ category }) => {
   const { showToast } = useAppContext();
   const [items, setItems] = useState([]);
@@ -117,6 +124,15 @@ const PurchasesManager = ({ category }) => {
     setDraggedItemId(null);
   };
 
+  const toggleBoughtStatus = (e, item) => {
+    e.stopPropagation();
+    const targetStatus = item.status === 'bought' ? 'pending' : 'bought';
+    setItems(prev => prev.map(i => 
+      i.id === item.id ? { ...i, status: targetStatus } : i
+    ));
+    showToast(targetStatus === 'bought' ? 'Перемещено в куплено' : 'Возвращено в покупки');
+  };
+
   // Filter items by category
   const categoryItems = category === 'all' ? items : items.filter(item => item.category === category);
   
@@ -136,6 +152,7 @@ const PurchasesManager = ({ category }) => {
       <table className="purchases-table">
         <thead>
           <tr>
+            <th style={{ width: '40px' }}></th>
             <th>Наименование</th>
             <th style={{textAlign: 'right'}}>Цена (€)</th>
           </tr>
@@ -149,21 +166,27 @@ const PurchasesManager = ({ category }) => {
               draggable
               onDragStart={(e) => handleDragStart(e, item.id)}
             >
-              <td className={isBought ? 'bought-text' : ''}>{item.name}</td>
-              <td className={isBought ? 'bought-text' : ''} style={{textAlign: 'right'}}>{item.price.toFixed(2)} €</td>
+              <td style={{ width: '40px', padding: '0.5rem 0.75rem' }}>
+                <button 
+                  className={`pm-check-btn ${isBought ? 'checked' : ''}`}
+                  onClick={(e) => toggleBoughtStatus(e, item)}
+                  title={isBought ? "Вернуть в список" : "Отметить купленным"}
+                >
+                  {isBought ? '✓' : ''}
+                </button>
+              </td>
+              <td className={isBought ? 'bought-text' : ''}>
+                {item.name}
+                {category === 'all' && item.category && (
+                  <span className="pm-cat-tag">({CAT_LABELS[item.category] || item.category})</span>
+                )}
+              </td>
+              <td className={isBought ? 'bought-text' : ''} style={{textAlign: 'right', whiteSpace: 'nowrap'}}>
+                {item.price.toFixed(2)} €
+              </td>
             </tr>
           ))}
         </tbody>
-        {!isBought && (
-          <tfoot>
-            <tr>
-              <td style={{ fontWeight: 'bold' }}>Итого:</td>
-              <td style={{ fontWeight: 'bold', color: 'var(--accent)', textAlign: 'right' }}>
-                {pendingSum.toFixed(2)} €
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </table>
     );
   };
@@ -174,11 +197,17 @@ const PurchasesManager = ({ category }) => {
       
       {/* PENDING LIST - DROPPABLE */}
       <div 
-        className="purchases-list-container droppable-area"
+        className="purchases-list-container pending-container droppable-area custom-scrollbar"
         onDragOver={handleDragOver}
         onDrop={(e) => handleDrop(e, 'pending')}
       >
         {renderTable(pendingItems, false)}
+      </div>
+
+      {/* FIXED TOTAL SUM */}
+      <div className="pm-total-sum">
+        <span>Итого:</span>
+        <span className="pm-total-val">{pendingSum.toFixed(2)} €</span>
       </div>
 
       <form className="add-purchase-form" onSubmit={handleAddItem}>
@@ -207,7 +236,7 @@ const PurchasesManager = ({ category }) => {
       {/* BOUGHT LIST - DROPPABLE */}
       <h4 className="section-subtitle mt-2">Уже куплено</h4>
       <div 
-        className="purchases-list-container bought-container droppable-area"
+        className="purchases-list-container bought-container droppable-area custom-scrollbar"
         onDragOver={handleDragOver}
         onDrop={(e) => handleDrop(e, 'bought')}
       >

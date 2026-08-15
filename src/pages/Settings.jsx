@@ -4,12 +4,23 @@ import TelegramLoginWidget from '../components/TelegramLoginWidget';
 import './Settings.css';
 
 const Settings = () => {
-  const { theme, setTheme, toastSettings, setToastSettings, showToast, telegramUser, setTelegramUser } = useAppContext();
+  const { 
+    theme, setTheme, 
+    toastSettings, setToastSettings, 
+    showToast, 
+    telegramUser, setTelegramUser,
+    dateFormat, setDateFormat
+  } = useAppContext();
 
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
     const themeName = e.target.value === 'dark' ? 'тёмную' : (e.target.value === 'light' ? 'светлую' : 'системную');
     showToast(`Тема изменена на ${themeName}`);
+  };
+
+  const handleDateFormatChange = (e) => {
+    setDateFormat(e.target.value);
+    showToast('Формат даты обновлен');
   };
 
   const handleToastToggle = (e) => {
@@ -74,6 +85,24 @@ const Settings = () => {
               <option value="system">Системная</option>
               <option value="light">Светлая</option>
               <option value="dark">Темная</option>
+            </select>
+          </li>
+
+          <li className="settings-item">
+            <div className="settings-info">
+              <h3>Формат даты</h3>
+              <p className="text-muted">Отображение дат в приложении.</p>
+            </div>
+            <select className="settings-select" value={dateFormat} onChange={handleDateFormatChange}>
+              <option value="dd/mm/yy">дд/мм/гг (15/08/26)</option>
+              <option value="dd.mm.yy">дд.мм.гг (15.08.26)</option>
+              <option value="dd/mm/yyyy">дд/мм/гггг (15/08/2026)</option>
+              <option value="dd.mm.yyyy">дд.мм.гггг (15.08.2026)</option>
+              <option value="mm/dd/yy">мм/дд/гг (08/15/26)</option>
+              <option value="mm/dd/yyyy">мм/дд/гггг (08/15/2026)</option>
+              <option value="month_words">Месяц словами (15 августа)</option>
+              <option value="dd/mm">дд/мм (15/08)</option>
+              <option value="mm/dd">мм/дд (08/15)</option>
             </select>
           </li>
           

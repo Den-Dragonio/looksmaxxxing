@@ -24,10 +24,10 @@ const Home = () => {
         
         {/* Right Column */}
         <div className="widgets-container right-widgets">
-          <div className="habit-tracker-container glass-panel">
+          <div className="habit-tracker-container">
             <HabitTracker />
           </div>
-          <div className="notes-container-home glass-panel">
+          <div className="notes-container-home">
             <NotesWidget />
           </div>
         </div>

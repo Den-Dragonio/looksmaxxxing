@@ -20,6 +20,10 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
+  const [dateFormat, setDateFormat] = useState(() => {
+    return localStorage.getItem('looksmaxxing_date_format') || 'dd/mm/yy';
+  });
+
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
@@ -57,6 +61,31 @@ export const AppProvider = ({ children }) => {
     }
   }, [telegramUser]);
 
+  useEffect(() => {
+    localStorage.setItem('looksmaxxing_date_format', dateFormat);
+  }, [dateFormat]);
+
+  const formatDate = (dateObj) => {
+    if (!dateObj) return '';
+    const d = new Date(dateObj);
+    const day = d.getDate().toString().padStart(2, '0');
+    const monthNum = (d.getMonth() + 1).toString().padStart(2, '0');
+    const yearFull = d.getFullYear().toString();
+    const yearShort = yearFull.slice(-2);
+    const monthLong = d.toLocaleDateString('ru-RU', { month: 'long' });
+
+    switch (dateFormat) {
+      case 'dd/mm/yy': return `${day}/${monthNum}/${yearShort}`;
+      case 'dd/mm/yyyy': return `${day}/${monthNum}/${yearFull}`;
+      case 'mm/dd/yy': return `${monthNum}/${day}/${yearShort}`;
+      case 'mm/dd/yyyy': return `${monthNum}/${day}/${yearFull}`;
+      case 'month_words': return `${parseInt(day, 10)} ${monthLong}`;
+      case 'dd/mm': return `${day}/${monthNum}`;
+      case 'mm/dd': return `${monthNum}/${day}`;
+      default: return `${day}/${monthNum}/${yearShort}`;
+    }
+  };
+
   const showToast = (message) => {
     if (!toastSettings.enabled) return;
     const id = Date.now().toString();
@@ -75,7 +104,8 @@ export const AppProvider = ({ children }) => {
       theme, setTheme, 
       toastSettings, setToastSettings, 
       toasts, showToast, removeToast,
-      telegramUser, setTelegramUser
+      telegramUser, setTelegramUser,
+      dateFormat, setDateFormat, formatDate
     }}>
       {children}
     </AppContext.Provider>

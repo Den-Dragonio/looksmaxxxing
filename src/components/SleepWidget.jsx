@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useAppContext } from '../context/AppContext';
 import './SleepWidget.css';
 
 const formatDuration = (hoursDec) => {
@@ -53,6 +54,7 @@ const generateGithubCalendar = () => {
 const { weeks: GITHUB_WEEKS, monthLabels: GITHUB_MONTHS } = generateGithubCalendar();
 
 const SleepWidget = () => {
+  const { formatDate } = useAppContext();
   const [period, setPeriod] = useState(7);
   const [sleepHistory, setSleepHistory] = useState([]);
 
@@ -67,12 +69,15 @@ const SleepWidget = () => {
   }, [offsetDays]);
 
   const activeDateId = activeDate.toISOString().split('T')[0];
-  const activeDateDisplay = activeDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'numeric' });
-  const activeDateTitle = activeDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  const activeDateDisplay = formatDate(activeDate);
+  const activeDateTitle = formatDate(activeDate);
 
   // Currently editing times for active date
   const [bedtime, setBedtime] = useState('23:00');
   const [wakeup, setWakeup] = useState('07:00');
+  
+  // Track the date ID for which the times are currently loaded, to prevent auto-save from overwriting when switching days
+  const loadedDateIdRef = useRef(null);
 
   // 1. Initial Load
   useEffect(() => {
@@ -101,12 +106,14 @@ const SleepWidget = () => {
         setWakeup('07:00');
       }
     }
+    // Mark this date's data as loaded
+    loadedDateIdRef.current = activeDateId;
   }, [activeDateId, sleepHistory]);
 
-  const getDurationHours = () => {
-    if (!bedtime || !wakeup) return 0;
-    const [bH, bM] = bedtime.split(':').map(Number);
-    const [wH, wM] = wakeup.split(':').map(Number);
+  const getDurationHours = (b = bedtime, w = wakeup) => {
+    if (!b || !w) return 0;
+    const [bH, bM] = b.split(':').map(Number);
+    const [wH, wM] = w.split(':').map(Number);
     
     let diff = (wH * 60 + wM) - (bH * 60 + bM);
     if (diff < 0) diff += 24 * 60;
@@ -117,6 +124,9 @@ const SleepWidget = () => {
 
   // Save current sleep to history on change
   useEffect(() => {
+    // Prevent saving if we haven't finished loading the selected day's data
+    if (loadedDateIdRef.current !== activeDateId) return;
+
     const duration = getDurationHours();
     if (duration > 0) {
       // Also remember last used times
@@ -237,7 +247,7 @@ const SleepWidget = () => {
           <div className="sleep-card">
             <div className="sleep-card-icon">🌙</div>
             <div className="sleep-card-content">
-              <span className="sleep-card-label">Отбой</span>
+              <span className="sleep-card-label">Лег спать</span>
               <input 
                 type="time" 
                 className="sleep-time-input" 
@@ -250,7 +260,7 @@ const SleepWidget = () => {
           <div className="sleep-card">
             <div className="sleep-card-icon">☀️</div>
             <div className="sleep-card-content">
-              <span className="sleep-card-label">Подъем</span>
+              <span className="sleep-card-label">Проснулся</span>
               <input 
                 type="time" 
                 className="sleep-time-input" 
