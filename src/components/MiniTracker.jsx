@@ -69,8 +69,8 @@ const MiniTracker = () => {
         const missedList = [];
 
         allRoutines.forEach(r => {
-          const historyArray = Array.isArray(r.history) ? r.history : [];
-          const isDone = historyArray.includes(d.key);
+          const historyObj = r.history || {};
+          const isDone = historyObj[d.key] === true;
           if (isDone) {
             completedList.push(`${r.emoji} ${r.title}`);
           } else {

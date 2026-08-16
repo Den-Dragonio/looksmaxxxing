@@ -94,7 +94,7 @@ const Settings = () => {
                 </button>
               </div>
             ) : (
-              <TelegramLoginWidget botName="samplebot" />
+              <TelegramLoginWidget botName="Looksmaxxxizm_bot" />
             )}
           </li>
           
