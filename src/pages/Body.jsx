@@ -10,12 +10,12 @@ const Body = () => {
         <p className="text-muted">Тренировки, питание, тату</p>
       </header>
       
-      <div className="dashboard-content" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', alignItems: 'start' }}>
-        <div className="glass-panel">
+      <div className="dashboard-content" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', alignItems: 'start', flex: 1, minHeight: 0 }}>
+        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
           <PurchasesManager category="body" />
         </div>
 
-        <div className="glass-panel" style={{ padding: 0, background: 'none', border: 'none', boxShadow: 'none' }}>
+        <div className="glass-panel" style={{ padding: 0, background: 'none', border: 'none', boxShadow: 'none', height: '100%', overflowY: 'auto' }}>
           <RoutineWidget category="body" />
         </div>
       </div>

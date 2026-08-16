@@ -1,7 +1,22 @@
 .settings-content {
-  max-width: 800px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.settings-left, .settings-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .settings-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 .settings-list {

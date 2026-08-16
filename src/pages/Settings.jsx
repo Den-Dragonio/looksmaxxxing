@@ -49,7 +49,29 @@ const Settings = () => {
       </header>
       
       <div className="settings-content">
-        <ul className="settings-list">
+        {/* Left Column: Friends */}
+        <div className="settings-left">
+          <div className="glass-panel" style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ marginTop: 0, marginBottom: '1rem' }}>Друзья</h2>
+            <p className="text-muted" style={{ marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+              Ищите друзей и делитесь результатами.
+            </p>
+            <input 
+              type="text" 
+              placeholder="Поиск друзей (ID или юзернейм)" 
+              className="settings-select"
+              style={{ marginBottom: '1.5rem', width: '100%' }}
+              disabled
+            />
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed var(--border)', borderRadius: '8px', color: 'var(--text-secondary)' }}>
+              <p>Нет добавленных друзей</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Settings */}
+        <div className="settings-right">
+          <ul className="settings-list">
           <li className="settings-item">
             <div className="settings-info">
               <h3>Авторизация</h3>
@@ -138,7 +160,19 @@ const Settings = () => {
               <option value="UAH">UAH (₴)</option>
             </select>
           </li>
+          
+          <li className="settings-item">
+            <div className="settings-info">
+              <h3>Язык (Language)</h3>
+              <p className="text-muted">Выбор языка интерфейса.</p>
+            </div>
+            <select className="settings-select" disabled>
+              <option value="ru">Русский (RU)</option>
+              <option value="en">English (EN)</option>
+            </select>
+          </li>
         </ul>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './MiniTracker.css';
 
 const CAT_EMOJI = { hair: '💇‍♂️', face: '✨', body: '🏋️', other: '📝' };
@@ -42,13 +43,27 @@ const loadAllRoutines = () => {
 };
 
 const MiniTracker = () => {
+  const { pathname } = useLocation();
   const [dates] = useState(generatePast7Dates());
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
-    // We update stats every 5 seconds to stay in sync with possible changes on pages
+    // Only update stats if we're on a category page
+    if (pathname === '/' || pathname === '/settings') return;
+
+    // Determine category from path
+    let currentCat = null;
+    if (pathname === '/face') currentCat = 'face';
+    else if (pathname === '/body') currentCat = 'body';
+    else if (pathname === '/hair') currentCat = 'hair';
+    else if (pathname === '/purchases') currentCat = 'other';
+
     const updateStats = () => {
-      const allRoutines = loadAllRoutines();
+      let allRoutines = loadAllRoutines();
+      if (currentCat) {
+        allRoutines = allRoutines.filter(r => r.category === currentCat);
+      }
+      
       const newStats = dates.map(d => {
         const completedList = [];
         const missedList = [];
@@ -77,7 +92,12 @@ const MiniTracker = () => {
     updateStats();
     const timer = setInterval(updateStats, 5000);
     return () => clearInterval(timer);
-  }, [dates]);
+  }, [dates, pathname]);
+
+  // Hide on Home and Settings pages
+  if (pathname === '/' || pathname === '/settings') {
+    return null;
+  }
 
   return (
     <div className="mini-tracker">

@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <div style={{display: 'flex', flexDirection: 'column', width: '100%', height: '100vh', overflow: 'hidden', position: 'relative'}}>
         <TickerTape />
         <MiniTracker />
-        <main className="main-content" style={{overflowY: 'auto', flex: 1}}>
+        <main className="main-content" style={{overflowY: 'hidden', flex: 1, display: 'flex', flexDirection: 'column'}}>
           {children}
         </main>
       </div>

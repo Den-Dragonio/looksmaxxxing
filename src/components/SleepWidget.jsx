@@ -249,7 +249,7 @@ const SleepWidget = () => {
           <div className="sleep-card">
             <div className="sleep-card-icon">🌙</div>
             <div className="sleep-card-content">
-              <span className="sleep-card-label">Лег спать</span>
+              <span className="sleep-card-label">Лег спать <span style={{fontSize: '0.65rem', color: 'var(--text-secondary)', marginLeft: '4px'}}>ВЧЕРА</span></span>
               <input 
                 type="time" 
                 className="sleep-time-input" 
@@ -262,7 +262,7 @@ const SleepWidget = () => {
           <div className="sleep-card">
             <div className="sleep-card-icon">☀️</div>
             <div className="sleep-card-content">
-              <span className="sleep-card-label">Проснулся</span>
+              <span className="sleep-card-label">Проснулся <span style={{fontSize: '0.65rem', color: 'var(--text-secondary)', marginLeft: '4px'}}>СЕГОДНЯ</span></span>
               <input 
                 type="time" 
                 className="sleep-time-input" 

@@ -12,7 +12,16 @@ const CAT_LABELS = {
 
 const PurchasesManager = ({ category }) => {
   const { showToast } = useAppContext();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('looksmaxxing_purchases');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return [];
+  });
   const [newItemName, setNewItemName] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
   const [sortBy, setSortBy] = useState('time-asc'); // time-asc, time-desc, price-asc, price-desc
@@ -26,14 +35,7 @@ const PurchasesManager = ({ category }) => {
   // Drag state
   const [draggedItemId, setDraggedItemId] = useState(null);
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('looksmaxxing_purchases');
-    if (saved) {
-      setItems(JSON.parse(saved));
-    }
-  }, []);
-
+  // Note: Initial load is now done synchronously in useState to avoid StrictMode bugs
   // Save to LocalStorage when items change
   useEffect(() => {
     localStorage.setItem('looksmaxxing_purchases', JSON.stringify(items));

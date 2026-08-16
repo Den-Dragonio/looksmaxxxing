@@ -18,7 +18,16 @@ const PRIORITY_ORDER = { high: 0, medium: 1, low: 2, none: 3 };
 
 const TodoWidget = () => {
   const { showToast } = useAppContext();
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    try {
+      const saved = localStorage.getItem('looksmaxxing_todos');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return [];
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -31,14 +40,7 @@ const TodoWidget = () => {
 
   const [draggedId, setDraggedId] = useState(null);
 
-  // Load
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('looksmaxxing_todos');
-      if (saved) setTodos(JSON.parse(saved));
-    } catch {}
-  }, []);
-
+  // Note: Initial load is now done synchronously in useState to avoid StrictMode bugs
   // Save
   useEffect(() => {
     localStorage.setItem('looksmaxxing_todos', JSON.stringify(todos));
