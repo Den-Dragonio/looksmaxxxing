@@ -4,6 +4,7 @@
   grid-template-columns: 1fr 2fr;
   gap: 1.5rem;
   flex: 1;
+  min-height: 0;
 }
 
 .purchases-left {
