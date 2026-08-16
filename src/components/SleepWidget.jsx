@@ -91,7 +91,12 @@ const SleepWidget = () => {
 
   // 2. When active date changes, load its times or defaults
   useEffect(() => {
-    const entry = sleepHistory.find(item => item.dateId === activeDateId);
+    let entry = null;
+    try {
+      const history = JSON.parse(localStorage.getItem('sleep-history') || '[]');
+      entry = history.find(item => item.dateId === activeDateId);
+    } catch {}
+    
     if (entry) {
       setBedtime(entry.bedtime || '23:00');
       setWakeup(entry.wakeup || '07:00');
@@ -108,7 +113,7 @@ const SleepWidget = () => {
     }
     // Mark this date's data as loaded
     loadedDateIdRef.current = activeDateId;
-  }, [activeDateId, sleepHistory]);
+  }, [activeDateId]);
 
   const getDurationHours = (b = bedtime, w = wakeup) => {
     if (!b || !w) return 0;
@@ -291,7 +296,10 @@ const SleepWidget = () => {
             {GITHUB_WEEKS.map((week, wIndex) => (
               <div key={wIndex} className="github-col">
                 {week.map((day, dIndex) => {
-                  const dateId = day.date.toISOString().split('T')[0];
+                  const yyyy = day.date.getFullYear();
+                  const mm = String(day.date.getMonth() + 1).padStart(2, '0');
+                  const dd = String(day.date.getDate()).padStart(2, '0');
+                  const dateId = `${yyyy}-${mm}-${dd}`;
                   const recorded = sleepHistory.find(h => h.dateId === dateId);
                   
                   // Color based on duration

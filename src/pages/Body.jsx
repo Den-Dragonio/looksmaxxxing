@@ -11,7 +11,7 @@ const Body = () => {
       </header>
       
       <div className="dashboard-content" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', alignItems: 'start', flex: 1, minHeight: 0 }}>
-        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'hidden' }}>
           <PurchasesManager category="body" />
         </div>
 
